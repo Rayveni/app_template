@@ -1,9 +1,6 @@
 version: "3.91"
 services:
 
-
-
-
   fast_api:
     build:
       context: ./
@@ -12,13 +9,8 @@ services:
     environment:
       - TZ=${timezone}
       - app_logs=/app/logs   
-      - log_level=${log_level}   
-      - redis_url=${redis_url}   
-      - redis_topics=${redis_topics}  
-      - pg_url=postgresql://${db_user}:${db_pswd}@${db_host}/${db_name}     
-      - app_name=${app_name}    
-      - redis_task_status=${redis_task_status}  
-      - start_trade_year=${start_trade_year}                
+      - log_level=${log_level}     
+      - app_name=${app_name}                  
     volumes: 
       - app_code_source:/app/app
       - logs-store:/app/logs 
@@ -28,9 +20,29 @@ services:
     ports:
       - "${app_ports}"
 
+  worker:
+    build:
+      context: ./worker/ 
+      dockerfile: Dockerfile    
+    image: local_image/worker 
+    environment:       
+      - TZ=${timezone}                              
+    volumes: 
+      - worker_code_source:/worker/worker
+      - common_libs:/worker/common_libs   
+    command: bash -c "/worker/start.sh"    
+    #command: python src/worker.py         
 
 
-
+  redis:
+    hostname: redis    
+    image: redis:8.6.1-alpine
+    ports:
+      - ${redis_port}  
+    volumes:
+      - type: bind
+        source: ${redis_data_folder}
+        target: /data   
 
 
 

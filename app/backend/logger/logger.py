@@ -11,10 +11,11 @@ class JsonFormatter(Formatter):
         json_record = {'created':ctime(record.__dict__['created']),
                        'levelname':record.__dict__['levelname']}
         json_record["message"] = record.getMessage()
-        if "req" in record.__dict__:
-            json_record["req"] = record.__dict__["req"]
-        if "res" in record.__dict__:
-            json_record["res"] = record.__dict__["res"]
+
+        for _record in record.__dict__["custom_fields"]:
+            json_record[_record] = record.__dict__[_record]
+         
+            
         if record.levelno == logging.ERROR and record.exc_info:
             json_record["err"] = self.formatException(record.exc_info)
         return json.dumps(json_record)

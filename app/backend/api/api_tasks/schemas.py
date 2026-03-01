@@ -15,13 +15,7 @@ class MessageHeader(BaseModelConfig):
     id: str = str(uuid4())#Field(default_factory=uuid4)  # lambda s:str(uuid4())
     type: str='default'
 
-            
-class SecuritiesHistory(BaseModelConfig):
-    task_name: str='update_securities_history'
-    engine:str ='stock'
-    market:str ='shares'
-    start_date:date=date(int(getenv('start_trade_year')),1,1)
-    end_date:date=datetime.now().date()
+        
     
 
    
