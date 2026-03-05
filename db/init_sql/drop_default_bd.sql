@@ -1,0 +1,6 @@
+CREATE USER app2user WITH ENCRYPTED PASSWORD 'secret456';
+CREATE DATABASE app2db WITH OWNER app2user;
+GRANT ALL PRIVILEGES ON DATABASE app2db TO app2user;
+
+drop DATABASE postgres;
+drop DATABASE user_pg;
